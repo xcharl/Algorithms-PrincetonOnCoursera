@@ -27,7 +27,7 @@ public class Deque<Item> implements Iterable<Item> {
             throw new IllegalArgumentException();
         }
 
-        var newNode = new Node<Item>(item);
+        var newNode = new Node<>(item);
 
         // If list is empty, add first AND last node
         if (this.isEmpty()) {
@@ -48,7 +48,7 @@ public class Deque<Item> implements Iterable<Item> {
             throw new IllegalArgumentException();
         }
 
-        var newNode = new Node<Item>(item);
+        var newNode = new Node<>(item);
 
         // If list is empty, add first AND last node
         if (this.isEmpty()) {
@@ -90,28 +90,29 @@ public class Deque<Item> implements Iterable<Item> {
     // return an iterator over items in order from front to back
     @Override
     public Iterator<Item> iterator() {
-        return new DequeIterator<Item>(this.firstNode);
+        return new DequeIterator<>(this.firstNode);
     }
 
     // unit testing (required)
     public static void main(String[] args) {
-        var x = new Deque<String>();
-        var p = x.isEmpty();
+        var testDeque = new Deque<String>();
+        System.out.println(testDeque.isEmpty());
 
-        x.addFirst("5");
-        x.addFirst("4");
-        x.addFirst("3");
-        x.addFirst("2");
-        x.addFirst("1");
-        x.addLast("6");
+        testDeque.addFirst("5");
+        testDeque.addFirst("4");
+        testDeque.addFirst("3");
+        testDeque.addFirst("2");
+        testDeque.addFirst("1");
+        testDeque.addLast("6");
 
-        var y = x.removeFirst();
-        var z = x.removeLast();
+        System.out.println(testDeque.removeFirst());
+        System.out.println(testDeque.removeLast());
 
-        var alpha = x.isEmpty();
-        var beta = x.size();
+        System.out.println(testDeque.isEmpty());
+        System.out.println(testDeque.size());
 
-        for (var a : x) {
+        for (var item : testDeque) {
+            System.out.println(item);
         }
     }
 
@@ -132,7 +133,7 @@ public class Deque<Item> implements Iterable<Item> {
         public T next() {
             var item = current.item;
             current = current.next;
-            return (T) item;
+            return item;
         }
     }
 
@@ -144,6 +145,6 @@ public class Deque<Item> implements Iterable<Item> {
 
         public Node<U> next;
         public Node<U> previous;
-        public U item;
+        public final U item;
     }
 }
