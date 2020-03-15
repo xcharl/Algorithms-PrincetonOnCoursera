@@ -69,10 +69,20 @@ public class Deque<Item> implements Iterable<Item> {
             throw new NoSuchElementException();
         }
 
-        var firstNode = this.firstNode;
-        this.firstNode = this.firstNode.next;
+        var oldFirstNode = this.firstNode;
+        this.firstNode = oldFirstNode.next;
+
+        // Prevent loitering.
+        if (this.firstNode == null) {
+            // If firstNode is now null, it means the deque is empty.
+            this.lastNode = null;
+        } else {
+            // Else just remove references to the old last node.
+            this.firstNode.previous = null;
+        }
+
         this.count--;
-        return firstNode.item;
+        return oldFirstNode.item;
     }
 
     // remove and return the item from the back
@@ -81,10 +91,20 @@ public class Deque<Item> implements Iterable<Item> {
             throw new NoSuchElementException();
         }
 
-        var lastNode = this.lastNode;
-        this.lastNode = this.lastNode.previous;
+        var oldLastNode = this.lastNode;
+        this.lastNode = oldLastNode.previous;
+
+        // Prevent loitering.
+        if (this.lastNode == null) {
+            // If lastNode is now null, it means the deque is empty.
+            this.firstNode = null;
+        } else {
+            // Else just remove references to the old last node.
+            this.lastNode.next = null;
+        }
+
         this.count--;
-        return lastNode.item;
+        return oldLastNode.item;
     }
 
     // return an iterator over items in order from front to back
@@ -96,7 +116,6 @@ public class Deque<Item> implements Iterable<Item> {
     // unit testing (required)
     public static void main(String[] args) {
         var testDeque = new Deque<String>();
-        System.out.println(testDeque.isEmpty());
 
         testDeque.addFirst("5");
         testDeque.addFirst("4");

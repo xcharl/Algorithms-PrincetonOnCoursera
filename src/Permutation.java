@@ -6,10 +6,8 @@ public class Permutation {
         var numStringsToOutput = Integer.parseInt(args[0]);
         var randomisedQueue = new RandomizedQueue<String>();
 
-        var inputStrings = StdIn.readAllStrings();
-
-        for (var inputString : inputStrings) {
-            randomisedQueue.enqueue(inputString);
+        while (!StdIn.isEmpty()) {
+            randomisedQueue.enqueue(StdIn.readString());
         }
 
         for (var i = 0; i < numStringsToOutput; i++) {
