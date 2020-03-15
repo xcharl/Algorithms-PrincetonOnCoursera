@@ -110,7 +110,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private void resizeIfRequired(int capacityRequired) {
-        if (this.count == 0) {
+        if (this.count == 0 || capacityRequired == 0) {
             this.resizeArray(1);
         } else if (this.queue.length < capacityRequired) {
             this.resizeArray(this.queue.length * 2);

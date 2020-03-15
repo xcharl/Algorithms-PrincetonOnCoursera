@@ -114,6 +114,26 @@ public class Deque<Item> implements Iterable<Item> {
         for (var item : testDeque) {
             System.out.println(item);
         }
+
+        var td2 = new Deque<String>();
+        td2.addFirst("10");
+        td2.addFirst("9");
+        td2.addFirst("8");
+        td2.addFirst("7");
+        td2.addFirst("6");
+        td2.addFirst("5");
+        td2.addFirst("4");
+        td2.addFirst("3");
+        td2.addFirst("2");
+        td2.addFirst("1");
+
+        var z = 0;
+        for (var item : td2) {
+            System.out.println(item);
+            z++;
+        }
+
+        System.out.println(z);
     }
 
     private class DequeIterator<T> implements Iterator<T> {
@@ -126,11 +146,15 @@ public class Deque<Item> implements Iterable<Item> {
 
         @Override
         public boolean hasNext() {
-            return current.next != null;
+            return current != null;
         }
 
         @Override
         public T next() {
+            if (!this.hasNext()) {
+                throw new NoSuchElementException("No elements in the deque.");
+            }
+
             var item = current.item;
             current = current.next;
             return item;
