@@ -1,2 +1,4 @@
 # Project exclude paths
 /out/
+*.class
+/srcFiles.txt

@@ -4,10 +4,8 @@ Assignment specification [here](https://coursera.cs.princeton.edu/algs4/assignme
 
 #### Compiling/Running:
 
-Windows - from **this folder** in Command Prompt:
+Windows - from **project root directory**:
 
-    set libpath=../../../../../lib/*
-    javac -cp "%libpath%" -d "out" Deque.java Permutation.java RandomizedQueue.java
-    cd out
-    echo Test1 Test2 Test3 Test4 | java -cp ".;%libpath%" Permutation 2
-    
+    dir /s /b *.java > srcFiles.txt
+    javac -cp "lib/*" -d "out" @srcFiles.txt
+    echo A B C D E F G H | java -cp "out;lib/*" edu.princeton.algorithms.stacks_queues.assignment.Permutation 3
