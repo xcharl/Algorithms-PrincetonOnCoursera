@@ -1,3 +1,5 @@
+package edu.princeton.algorithms.stacks_queues.assignment;
+
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
