@@ -107,13 +107,13 @@ public class Deque<Item> implements Iterable<Item> {
         return oldLastNode.item;
     }
 
-    // return an iterator over items in order from front to back
+    // Return an iterator over items in order from front to back.
     @Override
     public Iterator<Item> iterator() {
         return new DequeIterator(this.firstNode);
     }
 
-    // unit testing (required)
+    // Unit testing (required).
     public static void main(String[] args) {
         var testDeque = new Deque<String>();
 
