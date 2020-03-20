@@ -1,6 +1,5 @@
 package edu.princeton.algorithms.sorting.lessons;
 
-import java.lang.reflect.Array;
 import java.util.Map;
 import java.util.Random;
 
@@ -11,19 +10,50 @@ public class Sort {
             "insertion", Algorithm.Insertion);
 
     public static <T extends Comparable<T>> T[] bubble(T[] inputArray) {
-        var arrayToSort = inputArray.clone();
+        var array = inputArray.clone();
 
-        for (var i = 0; i < arrayToSort.length - 1; i++) {
-            for (var j = 0; j < arrayToSort.length - i - 1; j++) {
-                if (arrayToSort[j].compareTo(arrayToSort[j + 1]) > 0) {
-                    var temp = arrayToSort[j];
-                    arrayToSort[j] = arrayToSort[j + 1];
-                    arrayToSort[j + 1] = temp;
+        for (var i = 0; i < array.length - 1; i++) {
+            for (var j = 0; j < array.length - i - 1; j++) {
+                if (array[j].compareTo(array[j + 1]) > 0) {
+                    swap(array, j, j + 1);
                 }
             }
         }
 
-        return arrayToSort;
+        return array;
+    }
+
+    public static <T extends Comparable<T>> T[] selection(T[] inputArray) {
+        var array = inputArray.clone();
+
+        for (var i = 0; i < array.length; i++) {
+            var currentMin = i;
+            for (var j = i; j < array.length; j++) {
+                if (array[j].compareTo(array[currentMin]) < 0) {
+                    currentMin = j;
+                }
+            }
+
+            swap(array, i, currentMin);
+        }
+
+        return array;
+    }
+
+    public static <T extends Comparable<T>> T[] insertion(T[] inputArray) {
+        var array = inputArray.clone();
+
+        for (var i = 1; i < array.length; i++) {
+            for (var j = i; j > 0; j--) {
+                if (array[j - 1].compareTo(array[j]) > 0) {
+                    swap(array, j, j - 1);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return array;
     }
 
     public static void main(String[] args) throws Exception {
@@ -43,15 +73,26 @@ public class Sort {
             case Bubble:
                 sortedArray = Sort.bubble(randomArray);
                 break;
-            case Insertion:
             case Selection:
+                sortedArray = Sort.selection(randomArray);
+                break;
+            case Insertion:
+                sortedArray = Sort.insertion(randomArray);
+                break;
             default:
                 throw new Exception();
         }
 
         System.out.println(String.join(" ", convertGenericToStringArray(randomArray)));
         System.out.println(String.join(" ", convertGenericToStringArray(sortedArray)));
+        //noinspection ResultOfMethodCallIgnored
         System.in.read();
+    }
+
+    private static <T> void swap(T[] array, int index1, int index2) {
+        var temp = array[index1];
+        array[index1] = array[index2];
+        array[index2] = temp;
     }
 
     private static void validateInput(String[] args) {
