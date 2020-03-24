@@ -51,15 +51,28 @@ public class Point implements Comparable<Point> {
     }
 
     public Comparator<Point> slopeOrder() {
-        // TODO
-        return null;
+        return new PointComparator(this);
     }
 
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
+//
+//    }
 
+    private class PointComparator implements Comparator<Point> {
+
+        private final Point point;
+
+        public PointComparator(Point point) {
+            this.point = point;
+        }
+
+        @Override
+        public int compare(Point p1, Point p2) {
+            return Double.compare(this.point.slopeTo(p1), this.point.slopeTo(p2));
+        }
     }
 }
