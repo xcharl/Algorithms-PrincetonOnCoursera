@@ -72,6 +72,7 @@ public class Sort {
         // auxArray is for copying across when merging.
         var auxArray = inputArray.clone();
         mergeSort(array, auxArray, 0, array.length - 1);
+        assert isSorted(array);
         return array;
     }
 
@@ -103,12 +104,18 @@ public class Sort {
         var highInd = mid + 1;
 
         for (var i = low; i <= high; i++) {
-            if (lowInd > mid) { // Low has no more elements
+            if (lowInd > mid) {
+                // Low has no more elements
                 array[i] = auxArray[highInd++];
-            } else if (highInd > high) { // High has no more elements
+            } else if (highInd > high) {
+                // High has no more elements
                 array[i] = auxArray[lowInd++];
             } else if (auxArray[lowInd].compareTo(auxArray[highInd]) > 0) {
+                // Low is larger than high
                 array[i] = auxArray[highInd++];
+            } else {
+                // Elements have same value, or low is smaller - take low
+                array[i] = auxArray[lowInd++];
             }
         }
     }
@@ -156,7 +163,7 @@ public class Sort {
         var rng = new Random();
         var randomArray = new Integer[numberOfElements];
         for (var i = 0; i < numberOfElements; i++) {
-            randomArray[i] = rng.nextInt(100);
+            randomArray[i] = rng.nextInt(50);
         }
 
         Integer[] sortedArray;
@@ -177,8 +184,8 @@ public class Sort {
                 throw new Exception();
         }
 
-        System.out.println(String.join(" ", convertGenericToStringArray(randomArray)));
-        System.out.println(String.join(" ", convertGenericToStringArray(sortedArray)));
+        System.out.println(String.join(", ", convertGenericToStringArray(randomArray)));
+        System.out.println(String.join(", ", convertGenericToStringArray(sortedArray)));
         //noinspection ResultOfMethodCallIgnored
         System.in.read();
     }
