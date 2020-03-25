@@ -1,7 +1,9 @@
+package edu.princeton.algorithms.sorting.assignment;
+
 /*************************************************************************
- *  Compilation:  javac LineSegment.java
+ *  Compilation:  javac edu.princeton.algorithms.sorting.assignment.LineSegment.java
  *  Execution:    none
- *  Dependencies: Point.java
+ *  Dependencies: edu.princeton.algorithms.sorting.assignment.Point.java
  *
  *  An immutable data type for Line segments in the plane.
  *  For use on Coursera, Algorithms Part I programming assignment.
@@ -29,7 +31,6 @@ public class LineSegment {
         this.p = p;
         this.q = q;
     }
-
 
     /**
      * Draws this line segment to standard draw.

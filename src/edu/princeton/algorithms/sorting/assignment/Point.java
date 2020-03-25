@@ -1,3 +1,5 @@
+package edu.princeton.algorithms.sorting.assignment;
+
 import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
 
@@ -37,6 +39,7 @@ public class Point implements Comparable<Point> {
     }
 
     public int compareTo(Point that) {
+
         if (this.y > that.y) {
             return 1;
         } else if (this.y < that.y) {
