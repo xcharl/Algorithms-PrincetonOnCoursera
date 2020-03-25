@@ -1,6 +1,5 @@
 package edu.princeton.algorithms.sorting.assignment;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class BruteCollinearPoints {
@@ -50,12 +49,6 @@ public class BruteCollinearPoints {
                     // Duplicate point found.
                     throw new IllegalArgumentException();
                 }
-            }
-        }
-
-        for (var point : points) {
-            if (point == null) {
-                throw new IllegalArgumentException();
             }
         }
     }
