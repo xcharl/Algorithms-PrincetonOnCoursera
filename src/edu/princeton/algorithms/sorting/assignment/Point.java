@@ -29,9 +29,9 @@ public class Point implements Comparable<Point> {
 
         if (this.x == that.x && this.y == that.y) {
             return Double.NEGATIVE_INFINITY;
-        } else if (this.x == that.x) {
-            return 0.0d;
         } else if (this.y == that.y) {
+            return 0.0d;
+        } else if (this.x == that.x) {
             return Double.POSITIVE_INFINITY;
         }
 
@@ -46,7 +46,8 @@ public class Point implements Comparable<Point> {
             return -1;
         }
 
-        if (this.x == that.y) {
+        // 'y' is the same.
+        if (this.x == that.x) {
             return 0;
         }
 
@@ -75,7 +76,10 @@ public class Point implements Comparable<Point> {
 
         @Override
         public int compare(Point p1, Point p2) {
-            return Double.compare(this.point.slopeTo(p1), this.point.slopeTo(p2));
+            var slopeP1 = this.point.slopeTo(p1);
+            var slopeP2 = this.point.slopeTo(p2);
+            var comparison = Double.compare(slopeP1, slopeP2);
+            return comparison;
         }
     }
 }
