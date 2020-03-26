@@ -56,12 +56,17 @@ public class FastCollinearPoints {
             // First sort by smallest to largest to get correct line
             // segment end points, as merge sort is stable.
             Arrays.sort(points);
+            var testArrayByCompare = new Point[points.length];
+            for (var j = 0; j < points.length; j++) {
+                testArrayByCompare[j] = points[j];
+            }
+
             Arrays.sort(points, comparator);
 
-//            var testArray = new double[points.length];
-//            for (var j = 0; j < points.length; j++) {
-//                testArray[j] = pointsCopy[j].slopeTo(pointP);
-//            }
+            var testArrayBySlope = new double[points.length];
+            for (var j = 0; j < points.length; j++) {
+                testArrayBySlope[j] = points[j].slopeTo(refPoint);
+            }
 
             this.findCollinearPoints(lineSegments, refPoint, points);
         }
@@ -70,17 +75,19 @@ public class FastCollinearPoints {
     }
 
     private void findCollinearPoints(ArrayList<LineSegment> lineSegments, Point refPoint, Point[] points) {
-        int k;
-        for (var j = 0; j < points.length; j += k) {
-            for (k = j + 1; k < points.length; k++) {
+        int j;
+        for (var i = 0; i < points.length; i += (j - i)) {
+            var pointISlope = points[i].slopeTo(refPoint);
+
+            for (j = i + 1; j < points.length; j++) {
                 var pointJSlope = points[j].slopeTo(refPoint);
-                var pointKSlope = points[k].slopeTo(refPoint);
 
                 // Need at least 4 points, so 3 consecutive values in array.
-                if (pointJSlope != pointKSlope && (k - j) < 3) {
+                if (pointISlope != pointJSlope && (j - i) < 3) {
                     break;
-                } else if (pointJSlope != pointKSlope && (k - j) >= 3) {
-                    checkForExistingLineSegmentAndAdd(lineSegments, points[j], points[k - 1]);
+                } else if (pointISlope != pointJSlope && (j - i) >= 3) {
+                    var startPoint = refPoint.compareTo(points[i]) < 0;
+                    checkForExistingLineSegmentAndAdd(lineSegments, points[i], points[j - 1]);
                     return;
                 }
             }
@@ -91,8 +98,9 @@ public class FastCollinearPoints {
             ArrayList<LineSegment> lineSegments,
             Point startPoint,
             Point endPoint) {
+        // TODO - fix this
         for (var lineSegment : lineSegments) {
-            if (lineSegment.toString().equals(startPoint.toString() + " -> " + endPoint.toString())){
+            if (lineSegment.toString().equals(startPoint.toString() + " -> " + endPoint.toString())) {
                 return;
             }
         }
@@ -106,7 +114,7 @@ public class FastCollinearPoints {
     }
 
     public LineSegment[] segments() {
-        return this.lineSegments;
+        return this.lineSegments.clone();
     }
 
     private void validateInput(Point[] points) {

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class BruteCollinearPointsTest {
 
+
     @Test
     void segments_collinearPoints_returnsCorrectSegment() {
         var points = new Point[4];
