@@ -30,6 +30,7 @@ public class FastCollinearPoints {
         for (Point p : points) {
             p.draw();
         }
+
         StdDraw.show();
 
         // print and draw the line segments
@@ -56,17 +57,8 @@ public class FastCollinearPoints {
             // First sort by smallest to largest to get correct line
             // segment end points, as merge sort is stable.
             Arrays.sort(points);
-            var testArrayByCompare = new Point[points.length];
-            for (var j = 0; j < points.length; j++) {
-                testArrayByCompare[j] = points[j];
-            }
 
             Arrays.sort(points, comparator);
-
-            var testArrayBySlope = new double[points.length];
-            for (var j = 0; j < points.length; j++) {
-                testArrayBySlope[j] = points[j].slopeTo(refPoint);
-            }
 
             this.findCollinearPoints(lineSegments, refPoint, points);
         }
@@ -75,38 +67,37 @@ public class FastCollinearPoints {
     }
 
     private void findCollinearPoints(ArrayList<LineSegment> lineSegments, Point refPoint, Point[] points) {
-        int j;
-        for (var i = 0; i < points.length; i += (j - i)) {
-            var pointISlope = points[i].slopeTo(refPoint);
+        // Compare consecutive points to find groups of 3 (reference point makes it a group of 4).
+        // Skip [0] as it's the current point.
+        var start = 0;
+        var current = 0;
 
-            for (j = i + 1; j < points.length; j++) {
-                var pointJSlope = points[j].slopeTo(refPoint);
+        while (current < points.length) {
+            var startSlope = refPoint.slopeTo(points[start]);
 
-                // Need at least 4 points, so 3 consecutive values in array.
-                if (pointISlope != pointJSlope && (j - i) < 3) {
-                    break;
-                } else if (pointISlope != pointJSlope && (j - i) >= 3) {
-                    var startPoint = refPoint.compareTo(points[i]) < 0;
-                    checkForExistingLineSegmentAndAdd(lineSegments, points[i], points[j - 1]);
-                    return;
-                }
+            do {
+                current++;
+            } while (current < points.length && refPoint.slopeTo(points[current]) == startSlope);
+
+            if (current - start >= 3
+                    && this.isRefPointSmallestInGroup(refPoint, points, start, current - 1)) {
+                lineSegments.add(new LineSegment(refPoint, points[current - 1]));
             }
+
+            start = current;
         }
     }
 
-    private void checkForExistingLineSegmentAndAdd(
-            ArrayList<LineSegment> lineSegments,
-            Point startPoint,
-            Point endPoint) {
-        // TODO - fix this
-        for (var lineSegment : lineSegments) {
-            if (lineSegment.toString().equals(startPoint.toString() + " -> " + endPoint.toString())) {
-                return;
+    private boolean isRefPointSmallestInGroup(Point refPoint, Point[] points, int start, int end) {
+        for (var k = start; k <= end; k++) {
+            // Only add LineSegment if refPoint is the very lowest point
+            // in order to avoid duplicate line segments.
+            if (refPoint.compareTo(points[k]) >= 0) {
+                return false;
             }
         }
 
-        var lineSegment = new LineSegment(startPoint, endPoint);
-        lineSegments.add(lineSegment);
+        return true;
     }
 
     public int numberOfSegments() {

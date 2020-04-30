@@ -31,6 +31,7 @@ public class BruteCollinearPoints {
         for (Point p : points) {
             p.draw();
         }
+
         StdDraw.show();
 
         // print and draw the line segments

@@ -1,7 +1,8 @@
 package edu.princeton.algorithms.sorting.assignment;
 
-import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
+
+import java.util.Comparator;
 
 public class Point implements Comparable<Point> {
 
@@ -62,10 +63,6 @@ public class Point implements Comparable<Point> {
         return "(" + x + ", " + y + ")";
     }
 
-//    public static void main(String[] args) {
-//
-//    }
-
     private class PointComparator implements Comparator<Point> {
 
         private final Point point;
@@ -78,8 +75,7 @@ public class Point implements Comparable<Point> {
         public int compare(Point p1, Point p2) {
             var slopeP1 = this.point.slopeTo(p1);
             var slopeP2 = this.point.slopeTo(p2);
-            var comparison = Double.compare(slopeP1, slopeP2);
-            return comparison;
+            return Double.compare(slopeP1, slopeP2);
         }
     }
 }
