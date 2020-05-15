@@ -1,5 +1,7 @@
 package edu.princeton.algorithms.sorting.lessons;
 
+import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.Map;
 import java.util.Random;
 
@@ -8,7 +10,45 @@ public class Sort {
             "bubble", Algorithm.Bubble,
             "selection", Algorithm.Selection,
             "insertion", Algorithm.Insertion,
-            "merge", Algorithm.Merge);
+            "merge", Algorithm.Merge,
+            "quick", Algorithm.Quick);
+
+    public static void main(String[] args) throws Exception {
+        validateInput(args);
+
+        var algorithm = getAlgorithm(args);
+        var numberOfElements = getNumberOfElements(args);
+
+        var rng = new Random();
+        var randomArray = new Integer[numberOfElements];
+        for (var i = 0; i < numberOfElements; i++) {
+            randomArray[i] = rng.nextInt(50);
+        }
+
+        Integer[] sortedArray;
+        switch (algorithm) {
+            case Bubble:
+                sortedArray = Sort.bubble(randomArray);
+                break;
+            case Selection:
+                sortedArray = Sort.selection(randomArray);
+                break;
+            case Insertion:
+                sortedArray = Sort.insertion(randomArray);
+                break;
+            case Merge:
+                sortedArray = Sort.merge(randomArray);
+                break;
+            case Quick:
+                sortedArray = Sort.quick(randomArray);
+                break;
+            default:
+                throw new Exception();
+        }
+
+        System.out.println(String.join(", ", convertGenericToStringArray(randomArray)));
+        System.out.println(String.join(", ", convertGenericToStringArray(sortedArray)));
+    }
 
     // Sorting methods
 
@@ -63,6 +103,64 @@ public class Sort {
 
         assert isSorted(array);
         return array;
+    }
+
+    public static <T extends Comparable<T>> T[] quick(T[] inputArray) {
+        var array = inputArray.clone();
+        shuffle(array); // To guarantee performance (e.g. for nearly sorted lists).
+        quickSort(array, 0, array.length - 1);
+        return array;
+    }
+
+    private static <T extends Comparable<T>> void quickSort(T[] array, int low, int high) {
+        if (low >= high) {
+            return;
+        }
+
+        var pivot = partition(array, low, high);
+        quickSort(array, low, pivot - 1); // Sort LHS
+        quickSort(array, pivot + 1, high); // Sort RHS
+    }
+
+    private static <T extends Comparable<T>> void shuffle(T[] array) {
+        var random = new Random();
+        for (var i = 0; i < array.length; i++) {
+            var randIndex = i + random.nextInt(array.length - i);
+            swap(array, i, randIndex);
+        }
+    }
+
+    private static <T extends Comparable<T>> int partition(T[] array, int low, int high) {
+        var i = low + 1;
+        var j = high;
+        var pivot = low;
+
+        while (true) {
+            // Move left pointer.
+            while (array[i].compareTo(array[pivot]) < 0) {
+                i++;
+                if (i >= high) {
+                    break;
+                }
+            }
+
+            // Move right pointer.
+            while (array[j].compareTo(array[pivot]) > 0) {
+                j--;
+                if (j <= low) {
+                    break;
+                }
+            }
+
+            if (i >= j) {
+                break;
+            }
+
+            swap(array, i, j);
+        }
+
+        swap(array, low, j);
+        return j;
     }
 
     public static <T extends Comparable<T>> T[] merge(T[] inputArray) {
@@ -152,44 +250,6 @@ public class Sort {
         }
     }
 
-    // Entry point
-
-    public static void main(String[] args) throws Exception {
-        validateInput(args);
-
-        var algorithm = getAlgorithm(args);
-        var numberOfElements = getNumberOfElements(args);
-
-        var rng = new Random();
-        var randomArray = new Integer[numberOfElements];
-        for (var i = 0; i < numberOfElements; i++) {
-            randomArray[i] = rng.nextInt(50);
-        }
-
-        Integer[] sortedArray;
-        switch (algorithm) {
-            case Bubble:
-                sortedArray = Sort.bubble(randomArray);
-                break;
-            case Selection:
-                sortedArray = Sort.selection(randomArray);
-                break;
-            case Insertion:
-                sortedArray = Sort.insertion(randomArray);
-                break;
-            case Merge:
-                sortedArray = Sort.merge(randomArray);
-                break;
-            default:
-                throw new Exception();
-        }
-
-        System.out.println(String.join(", ", convertGenericToStringArray(randomArray)));
-        System.out.println(String.join(", ", convertGenericToStringArray(sortedArray)));
-        //noinspection ResultOfMethodCallIgnored
-        System.in.read();
-    }
-
     // Main method helpers
 
     private static void validateInput(String[] args) {
@@ -244,6 +304,7 @@ public class Sort {
         Bubble,
         Selection,
         Merge,
+        Quick,
         Insertion
     }
 }
